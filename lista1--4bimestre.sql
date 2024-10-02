@@ -2,9 +2,9 @@
 CREATE VIEW alunos_cursos AS
 SELECT a.nome AS aluno_nome, d.nome AS disciplina_nome, c.nome AS curso_nome
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
-JOIN disciplinas d ON m.disciplina_id = d.id
-JOIN cursos c ON d.curso_id = c.id;
+INNER JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN disciplinas d ON m.disciplina_id = d.id
+INNER JOIN cursos c ON d.curso_id = c.id;
 
 -- 2. Exibir total de alunos por disciplina
 CREATE VIEW total_alunos_disciplina AS
@@ -17,15 +17,15 @@ GROUP BY d.nome;
 CREATE VIEW alunos_status_matricula AS
 SELECT a.nome AS aluno_nome, d.nome AS disciplina_nome, m.status AS matricula_status
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
-JOIN disciplinas d ON m.disciplina_id = d.id;
+INNER JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN disciplinas d ON m.disciplina_id = d.id;
 
 -- 4. Exibir professores e suas turmas
 CREATE VIEW professores_turmas AS
 SELECT p.nome AS professor_nome, d.nome AS disciplina_nome, t.horario AS turma_horario
 FROM professores p
-JOIN disciplinas d ON p.id = d.professor_id
-JOIN turmas t ON d.id = t.disciplina_id;
+INNER JOIN disciplinas d ON p.id = d.professor_id
+INNER JOIN turmas t ON d.id = t.disciplina_id;
 
 -- 5. Exibir alunos maiores de 20 anos
 CREATE VIEW alunos_maiores_20 AS
@@ -37,7 +37,7 @@ WHERE DATE_PART('year', age(a.data_nascimento)) > 20;
 CREATE VIEW carga_horaria_cursos AS
 SELECT c.nome AS curso_nome, COUNT(d.id) AS total_disciplinas, SUM(d.carga_horaria) AS carga_horaria_total
 FROM cursos c
-JOIN disciplinas d ON c.id = d.curso_id
+INNER JOIN disciplinas d ON c.id = d.curso_id
 GROUP BY c.nome;
 
 -- 7. Exibir professores e suas especialidades
@@ -49,7 +49,7 @@ FROM professores p;
 CREATE VIEW alunos_multidisciplinas AS
 SELECT a.nome AS aluno_nome
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN matriculas m ON a.id = m.aluno_id
 GROUP BY a.id
 HAVING COUNT(m.disciplina_id) > 1;
 
@@ -57,7 +57,7 @@ HAVING COUNT(m.disciplina_id) > 1;
 CREATE VIEW alunos_disciplinas_concluidas AS
 SELECT a.nome AS aluno_nome, COUNT(m.disciplina_id) AS disciplinas_concluidas
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN matriculas m ON a.id = m.aluno_id
 WHERE m.status = 'Concluído'
 GROUP BY a.id;
 
@@ -71,7 +71,7 @@ WHERE t.semestre = '2024.1';
 CREATE VIEW alunos_matriculas_trancadas AS
 SELECT a.nome AS aluno_nome
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN matriculas m ON a.id = m.aluno_id
 WHERE m.status = 'Trancado';
 
 -- 12. Exibir disciplinas que não têm alunos matriculados
@@ -102,14 +102,14 @@ FROM alunos a;
 CREATE VIEW alunos_ultimas_matriculas AS
 SELECT a.nome AS aluno_nome, MAX(m.data_matricula) AS ultima_matricula
 FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
+INNER JOIN matriculas m ON a.id = m.aluno_id
 GROUP BY a.id;
 
 -- 17. Exibir todas as disciplinas de um curso específico
 CREATE VIEW disciplinas_curso_especifico AS
 SELECT d.*
 FROM disciplinas d
-JOIN cursos c ON d.curso_id = c.id
+INNER JOIN cursos c ON d.curso_id = c.id
 WHERE c.nome = 'Engenharia de Software';
 
 -- 18. Exibir os professores que não têm turmas
@@ -129,5 +129,5 @@ FROM alunos a;
 CREATE VIEW total_disciplinas_por_professor AS
 SELECT p.nome AS professor_nome, COUNT(d.id) AS total_disciplinas
 FROM professores p
-JOIN disciplinas d ON p.id = d.professor_id
+INNER JOIN disciplinas d ON p.id = d.professor_id
 GROUP BY p.id;
